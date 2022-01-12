@@ -107,34 +107,34 @@ exports.config = {
     connectionRetryCount: 3,
 
     // forced to usage docker service
-    // host: 'localhost',
-    // port: 4444,
-    // path: '/wd/hub',
+    host: 'localhost',
+    port: 4444,
+    path: '/wd/hub',
 
     //
     // Test runner services
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['chromedriver'],
+    services: ['docker'],
 
-    // dockerOptions: {
-    //     // image: 'selenium/standalone-chrome',  // for x86_64
-    //     image: 'seleniarm/standalone-chromium',  // for arm64
-    //     healthCheck: {
-    //         url: 'http://localhost:4444',
-    //         maxRetries: 5,
-    //         inspectInterval: 1000,
-    //         startDelay: 2000
-    //     },
-    //     options: {
-    //         p: ['4444:4444'],
-    //         shmSize: '2g',
-    //     },
-    // },
-    // onDockerReady() {
-    //     console.log('DOCKER CONTAINER IS UP.......');
-    // },
+    dockerOptions: {
+        // image: 'selenium/standalone-chrome',  // for x86_64
+        image: 'seleniarm/standalone-chromium',  // for arm64
+        healthCheck: {
+            url: 'http://localhost:4444',
+            maxRetries: 5,
+            inspectInterval: 1000,
+            startDelay: 2000
+        },
+        options: {
+            p: ['4444:4444'],
+            shmSize: '2g',
+        },
+    },
+    onDockerReady() {
+        console.log('DOCKER CONTAINER IS UP.......');
+    },
 
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
