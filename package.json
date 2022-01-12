@@ -13,6 +13,7 @@
         "wdio-docker-service": "^3.2.0"
     },
     "scripts": {
-        "wdio": "wdio run wdio.conf.js"
+        "wdio": "wdio run wdio.conf.js",
+        "test": "npx wdio run wdio.conf.js"
     }
 }

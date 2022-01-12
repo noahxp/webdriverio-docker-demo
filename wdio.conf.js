@@ -54,7 +54,7 @@ exports.config = {
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
-        maxInstances: 5,
+        maxInstances: 1,
         //
         browserName: 'chrome',
         acceptInsecureCerts: true
@@ -105,6 +105,12 @@ exports.config = {
     //
     // Default request retries count
     connectionRetryCount: 3,
+
+    // forced to usage docker service
+    host: 'localhost',
+    port: 4444,
+    path: '/wd/hub',
+
     //
     // Test runner services
     // Services take over a specific job you don't want to take care of. They enhance
@@ -113,12 +119,21 @@ exports.config = {
     services: ['docker'],
 
     dockerOptions: {
-        image: 'selenium/standalone-chrome',
-        healthCheck: 'http://localhost:4444',
+        // image: 'selenium/standalone-chrome',  // for x64
+        image: 'seleniarm/standalone-chromium',  // for arm64
+        healthCheck: {
+            url: 'http://localhost:4444',
+            maxRetries: 5,
+            inspectInterval: 1000,
+            startDelay: 2000
+        },
         options: {
             p: ['4444:4444'],
-            shmSize: '2g'
-        }
+            shmSize: '2g',
+        },
+    },
+    onDockerReady() {
+        console.log('DOCKER CONTAINER IS UP.......');
     },
 
     // Framework you want to run your specs with.
