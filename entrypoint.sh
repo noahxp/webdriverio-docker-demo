@@ -1,5 +1,16 @@
 #!/bin/bash
 
+[ -f /usr/bin/firefox ] && export SCRIPTS="docker-firefox"
+[ -f /usr/bin/chromium ] && export SCRIPTS="docker-chrome"
+[ -f /usr/bin/chrome ] && export SCRIPTS="docker-chrome"
+
+
+uu=`uname -m`
+echo 'uname -m:' $uu
+if [ "$uu" = "arm64" ] || [ "$uu" = "aarch64" ];then
+	export SCRIPTS="$SCRIPTS-arm64"
+fi
+
 /opt/bin/entry_point.sh > /dev/null 2>&1 &
 
 for number in {1..120}
@@ -7,7 +18,7 @@ do
 	if curl http://localhost:4444; then
 		break
 	fi
-  echo 'Waitting selenium service,' $number
+  echo "Waiting selenium service," $number
 	sleep 1
 done
 
@@ -17,4 +28,5 @@ fi
 
 
 cd /app
-npm run docker
+echo "npm run $SCRIPTS"
+npm run $SCRIPTS

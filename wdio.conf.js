@@ -1,3 +1,8 @@
+
+const BROWSER = process.env.BROWSER;        // browser type, ex: chrome, firefox
+const RUN_SERVICE = process.env.SERVICE;    // docker for dockerized, chromedriver for local chrome browser
+const DOCKER_IMAGE = process.env.IMAGE;     // selenium standalone docker image
+
 exports.config = {
     //
     // ====================
@@ -56,7 +61,7 @@ exports.config = {
         // 5 instances get started at a time.
         maxInstances: 1,
         //
-        browserName: 'chrome',
+        browserName: BROWSER,
         acceptInsecureCerts: true
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.
@@ -106,35 +111,39 @@ exports.config = {
     // Default request retries count
     connectionRetryCount: 3,
 
-    // forced to usage docker service
-    // host: 'localhost',
-    // port: 4444,
-    // path: '/wd/hub',
+
 
     //
     // Test runner services
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['chromedriver'],
+    services: [RUN_SERVICE],
 
-    // dockerOptions: {
-    //     // image: 'selenium/standalone-chrome',  // for x86_64
-    //     image: 'seleniarm/standalone-chromium',  // for arm64
-    //     healthCheck: {
-    //         url: 'http://localhost:4444',
-    //         maxRetries: 5,
-    //         inspectInterval: 1000,
-    //         startDelay: 2000
-    //     },
-    //     options: {
-    //         p: ['4444:4444'],
-    //         shmSize: '2g',
-    //     },
-    // },
-    // onDockerReady() {
-    //     console.log('DOCKER CONTAINER IS UP.......');
-    // },
+
+    /****** environment for docker */
+    // forced to usage docker service
+    host: 'localhost',
+    port: 4444,
+    path: '/wd/hub',
+
+    dockerOptions: {
+        image: DOCKER_IMAGE,
+        healthCheck: {
+            url: 'http://localhost:4444',
+            maxRetries: 5,
+            inspectInterval: 1000,
+            startDelay: 2000
+        },
+        options: {
+            p: ['4444:4444'],
+            shmSize: '2g',
+        },
+    },
+    onDockerReady() {
+        console.log('Docker container is ready......');
+    },
+
 
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber

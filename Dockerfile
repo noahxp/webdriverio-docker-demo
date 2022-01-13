@@ -29,10 +29,11 @@ RUN npm install
 
 
 #####
-# x86_64: selenium/standalone-chrome:latest
-# arm64: seleniarm/standalone-chromium
+# x86_64-chrome:  selenium/standalone-chrome:latest
+# x86_64-firefox: selenium/standalone-firefox:latest
+# arm64-chrome:  seleniarm/standalone-chromium:latest
+# arm64-firefox: seleniarm/standalone-firefox:latest
 #####
-# FROM selenium/standalone-chrome:latest
 FROM seleniarm/standalone-chromium:latest
 
 ENV TERM="xterm-color"
@@ -57,4 +58,3 @@ WORKDIR $APP_DIR
 
 
 CMD [ "/app/entrypoint.sh" ]
-

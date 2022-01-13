@@ -15,7 +15,10 @@
         "wdio-docker-service": "^3.2.0"
     },
     "scripts": {
-        "local": "wdio run wdio.conf.js",
-        "docker": "wdio run wdio.conf.docker.js"
+        "local": "env SERVICE=chromedriver BROWSER=chrome wdio run wdio.conf.js",
+        "docker-chrome": "env SERVICE=docker BROWSER=chrome IMAGE=selenium/standalone-chrome wdio run wdio.conf.js",
+        "docker-chrome-arm64": "env SERVICE=docker BROWSER=chrome IMAGE=seleniarm/standalone-chromium wdio run wdio.conf.js",
+        "docker-firefox": "env SERVICE=docker BROWSER=firefox IMAGE=selenium/standalone-firefox wdio run wdio.conf.js",
+        "docker-firefox-arm64": "env SERVICE=docker BROWSER=firefox IMAGE=seleniarm/standalone-firefox wdio run wdio.conf.js"
     }
 }
