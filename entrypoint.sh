@@ -2,7 +2,7 @@
 
 [ -f /usr/bin/firefox ] && export SCRIPTS="docker-firefox"
 [ -f /usr/bin/chromium ] && export SCRIPTS="docker-chrome"
-[ -f /usr/bin/chrome ] && export SCRIPTS="docker-chrome"
+[ -f /usr/bin/google-chrome ] && export SCRIPTS="docker-chrome"
 
 
 uu=`uname -m`
