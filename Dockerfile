@@ -28,13 +28,16 @@ WORKDIR $APP_DIR
 RUN npm install
 
 
-#####
+
+###############
 # x86_64-chrome:  selenium/standalone-chrome:latest
 # x86_64-firefox: selenium/standalone-firefox:latest
 # arm64-chrome:  seleniarm/standalone-chromium:latest
 # arm64-firefox: seleniarm/standalone-firefox:latest
-#####
-FROM seleniarm/standalone-chromium:latest
+###############
+
+##### x86_64-chrome
+FROM selenium/standalone-chrome:latest as x86_64-chrome
 
 ENV TERM="xterm-color"
 ENV LANG='en_US.UTF-8'
@@ -58,3 +61,85 @@ WORKDIR $APP_DIR
 
 
 CMD [ "/app/entrypoint.sh" ]
+
+
+##### x86_64-firefox
+FROM selenium/standalone-firefox:latest as x86_64-firefox
+
+ENV TERM="xterm-color"
+ENV LANG='en_US.UTF-8'
+ENV LANGUAGE='en_US.UTF-8'
+
+ENV NVM_DIR /opt/nvm
+ENV NODE_VERSION v16.13.2
+ENV APP_DIR /app
+
+RUN [ -d $APP_DIR ] || (sudo mkdir -p $APP_DIR && sudo chown `whoami`:`id -g -n` $APP_DIR)
+RUN [ -d $NVM_DIR ] || (sudo mkdir -p $NVM_DIR && sudo chown `whoami`:`id -g -n` $NVM_DIR)
+
+COPY --from=build $NVM_DIR/install.sh $NVM_DIR
+RUN /bin/bash $NVM_DIR/install.sh
+
+ENV PATH $NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH
+
+COPY --chown=seluser:seluser --from=build $APP_DIR $APP_DIR
+
+WORKDIR $APP_DIR
+
+
+CMD [ "/app/entrypoint.sh" ]
+
+
+##### arm64-chrome
+FROM seleniarm/standalone-chromium:latest as arm64-chrome
+
+ENV TERM="xterm-color"
+ENV LANG='en_US.UTF-8'
+ENV LANGUAGE='en_US.UTF-8'
+
+ENV NVM_DIR /opt/nvm
+ENV NODE_VERSION v16.13.2
+ENV APP_DIR /app
+
+RUN [ -d $APP_DIR ] || (sudo mkdir -p $APP_DIR && sudo chown `whoami`:`id -g -n` $APP_DIR)
+RUN [ -d $NVM_DIR ] || (sudo mkdir -p $NVM_DIR && sudo chown `whoami`:`id -g -n` $NVM_DIR)
+
+COPY --from=build $NVM_DIR/install.sh $NVM_DIR
+RUN /bin/bash $NVM_DIR/install.sh
+
+ENV PATH $NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH
+
+COPY --chown=seluser:seluser --from=build $APP_DIR $APP_DIR
+
+WORKDIR $APP_DIR
+
+
+CMD [ "/app/entrypoint.sh" ]
+
+
+##### arm64-firefox
+FROM seleniarm/standalone-firefox:latest as arm64-firefox
+
+ENV TERM="xterm-color"
+ENV LANG='en_US.UTF-8'
+ENV LANGUAGE='en_US.UTF-8'
+
+ENV NVM_DIR /opt/nvm
+ENV NODE_VERSION v16.13.2
+ENV APP_DIR /app
+
+RUN [ -d $APP_DIR ] || (sudo mkdir -p $APP_DIR && sudo chown `whoami`:`id -g -n` $APP_DIR)
+RUN [ -d $NVM_DIR ] || (sudo mkdir -p $NVM_DIR && sudo chown `whoami`:`id -g -n` $NVM_DIR)
+
+COPY --from=build $NVM_DIR/install.sh $NVM_DIR
+RUN /bin/bash $NVM_DIR/install.sh
+
+ENV PATH $NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH
+
+COPY --chown=seluser:seluser --from=build $APP_DIR $APP_DIR
+
+WORKDIR $APP_DIR
+
+
+CMD [ "/app/entrypoint.sh" ]
+

@@ -33,16 +33,20 @@ $ npm install
 
 ## Packaged as docker image
 
-- modify docker base image in [Dockerfile](./Dockerfile)
-  - x86_64-chrome:  `selenium/standalone-chrome:latest`
-  - x86_64-firefox: `selenium/standalone-firefox:latest`
-  - arm64-chrome:  `seleniarm/standalone-chromium:latest`
-  - arm64-firefox: `seleniarm/standalone-firefox:latest`
 - build docker image
 
   ```bash
-  # build docker image
-  $ docker build -t="DOCKER_IMAGE" .
+  # build docker image as x86_64-chrome
+  $ docker build --target x86_64-chrome -t="DOCKER_IMAGE" .
+
+  # build docker image as x86_64-firefox
+  $ docker build --target x86_64-firefox -t="DOCKER_IMAGE" .
+
+  # build docker image as arm64-chrome
+  $ docker build --target arm64-chrome -t="DOCKER_IMAGE" .
+
+  # build docker image as arm64-firefox
+  $ docker build --target arm64-firefox -t="DOCKER_IMAGE" .
 
   # run in docker cotainer
   $ docker run -it --rm DOCKER_IMAGE
